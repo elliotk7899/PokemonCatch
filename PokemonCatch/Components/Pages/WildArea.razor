@@ -1,0 +1,36 @@
+﻿@page "/wildarea"
+
+<h3>WildArea</h3>
+
+<MudTable Items="@Areas" Hover="true">
+    <HeaderContent>
+        <MudTh></MudTh>
+        <MudTh></MudTh>
+        <MudTh></MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Name">@context.Name</MudTd>
+        <MudTd DataLabel="LevelNeeded">@context.RequiredLevel</MudTd>
+        <MudTd DataLabel="Button"><MudButton Href="@context.Link" Variant="Variant.Filled" Color="Color.Success">Go</MudButton></MudTd>
+    </RowTemplate>
+</MudTable>
+
+
+@code {
+
+    List<PokemonCatch.WildArea> Areas = new List<PokemonCatch.WildArea>();
+
+    PokemonCatch.WildArea Route1 = new PokemonCatch.WildArea
+    {
+        Name = "Route 1",
+        RequiredLevel = 1,
+        Link = "/route1"
+    };
+
+    protected override void OnInitialized()
+    {
+        Areas.Add(Route1);
+    }
+
+
+}

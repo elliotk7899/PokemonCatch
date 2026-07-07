@@ -1,0 +1,62 @@
+﻿@page "/route1"
+@rendermode InteractiveServer
+
+<MudGrid Justify="Justify.Center">
+
+    <MudItem><h3>Route 1</h3></MudItem>
+    <MudFlexBreak />
+    <MudItem><MudButton Variant="Variant.Filled" Color="Color.Success" Disabled="@Searching" OnClick="Encounter">Search</MudButton></MudItem>
+
+    <MudFlexBreak />
+
+    @if(Searching)
+    {
+        <MudItem xs="6">
+            <MudPaper>
+                <MudElement HtmlTag="h3">
+                    @PokemonEncountered.Name&nbsp;@if(PokemonEncountered.Gender == "Male")
+                    {
+                        <MudIcon Icon="@Icons.Material.Filled.Male" Color="Color.Info" />
+                    }
+                    else if (PokemonEncountered.Gender == "Female")
+                    {
+                        <MudIcon Icon="@Icons.Material.Filled.Female" Color="Color.Secondary" />
+                    }
+                    @if(PokemonEncountered.IsShiny)
+                    {
+                        <MudIcon Icon="@Icons.Material.Filled.Star" Color="Color.Warning" />                            
+                    }
+                </MudElement>
+                <MudImage Src="@PokemonEncountered.Image" Alt="@PokemonEncountered.Name" Width="50%" Height="auto" />
+                <MudElement HtmlTag="p">Type: @PokemonEncountered.Type</MudElement>
+                <MudElement HtmlTag="p">Weight: @PokemonEncountered.Weight lbs</MudElement>
+                <MudButton Variant="Variant.Filled" Color="Color.Error">Catch</MudButton>
+                <MudButton Variant="Variant.Filled" Color="Color.Info">Run</MudButton>
+            </MudPaper>
+        </MudItem>
+    }
+
+</MudGrid>
+
+
+
+
+
+@code {
+    private bool Searching = false;
+    private Pokemon PokemonEncountered { get; set; }
+    private PokemonReference[] NativePokemon = { PokemonReference.AllPokemon[0] };
+    private PokemonReference Selected { get; set; }
+
+    Random rand = new Random();
+
+
+    private void Encounter()
+    {
+        Searching = true;
+
+        Selected = NativePokemon[0];
+
+        PokemonEncountered = Pokemon.CreatePokemon(Selected);
+    }
+}
