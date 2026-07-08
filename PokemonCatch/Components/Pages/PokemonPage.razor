@@ -1,0 +1,24 @@
+﻿@page "/pokemon"
+
+<h3>Pokemon</h3>
+
+<MudTable Items="Game.User.PokemonCaught" Hover="true">
+    <HeaderContent>
+        <MudTh>Name</MudTh>
+        <MudTh>Type</MudTh>
+        <MudTh>Gender</MudTh>
+        <MudTh>Weight</MudTh>
+        <MudTh>Height</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Name">@context.Name</MudTd>
+        <MudTd DataLabel="Type">@context.Type1</MudTd>
+        <MudTd DataLabel="Gender">@context.Gender</MudTd>
+        <MudTd DataLabel="Weight">@context.Weight</MudTd>
+        <MudTd DataLabel="Height">@context.Height</MudTd>
+    </RowTemplate>
+</MudTable>
+
+@code {
+
+}

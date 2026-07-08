@@ -1,0 +1,33 @@
+﻿<MudDialog Style="width: 35%; height: 25%;">
+    <TitleContent>
+        Select a Pokeball:
+    </TitleContent>
+    <DialogContent>
+        <MudSelect @bind-Value="SelectedPokeball" Label="Select Pokeball">
+            @foreach (var Ball in Game.User.Bag)
+            {
+                @if (Ball.Number > 0)
+                {
+                    <MudSelectItem Value="Ball">@Ball.Name (@Ball.Number)</MudSelectItem>
+                }
+            }
+        </MudSelect>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Cancel</MudButton>
+        <MudButton Color="Color.Error" OnClick="Catch" Disabled="@(SelectedPokeball == null)">Catch</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+
+    private Pokeball SelectedPokeball { get; set; }
+
+
+    [CascadingParameter] private IMudDialogInstance MudDialog { get; set; }
+
+    private void Catch() => MudDialog.Close(DialogResult.Ok(SelectedPokeball));
+
+    private void Cancel() => MudDialog.Cancel();
+
+}

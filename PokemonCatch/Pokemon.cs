@@ -4,9 +4,10 @@
     {
         public string Name { get; set; }
         public double Weight { get; set; }
-        public PokemonType Type { get; set; }
+        public double Height { get; set; }
+        public PokemonType Type1 { get; set; }
         public string Gender { get; set; }
-        public double CatchRate { get; set; }
+
         public bool IsShiny = false;
         public string Image { get; set; }
         public PokemonType Type2 { get; set; }
@@ -19,7 +20,8 @@
             {
                 Name = Reference.Name,
                 Weight = Reference.Weight,
-                Type = Reference.Type
+                Height = Reference.Height,
+                Type1 = Reference.Type
             };
 
             if (Reference.HasGender)

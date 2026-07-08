@@ -1,5 +1,7 @@
 ﻿@page "/route1"
-@rendermode InteractiveServer
+@inject IDialogService DialogService
+@inject ISnackbar Snackbar
+
 
 <MudGrid Justify="Justify.Center">
 
@@ -8,48 +10,73 @@
     <MudItem><MudButton Variant="Variant.Filled" Color="Color.Success" Disabled="@Searching" OnClick="Encounter">Search</MudButton></MudItem>
 
     <MudFlexBreak />
+    <MudItem></MudItem>
+    <MudFlexBreak />
 
     @if(Searching)
     {
         <MudItem xs="6">
             <MudPaper>
-                <MudElement HtmlTag="h3">
-                    @PokemonEncountered.Name&nbsp;@if(PokemonEncountered.Gender == "Male")
-                    {
-                        <MudIcon Icon="@Icons.Material.Filled.Male" Color="Color.Info" />
-                    }
+                <MudGrid Justify="Justify.Center">
+                    <MudItem>
+                        <MudElement HtmlTag="h3">
+                            @PokemonEncountered.Name&nbsp;@if(PokemonEncountered.Gender == "Male")
+                            {
+                                <MudIcon Icon="@Icons.Material.Filled.Male" Color="Color.Info" />
+                            }
                     else if (PokemonEncountered.Gender == "Female")
-                    {
-                        <MudIcon Icon="@Icons.Material.Filled.Female" Color="Color.Secondary" />
-                    }
-                    @if(PokemonEncountered.IsShiny)
-                    {
-                        <MudIcon Icon="@Icons.Material.Filled.Star" Color="Color.Warning" />                            
-                    }
-                </MudElement>
-                <MudImage Src="@PokemonEncountered.Image" Alt="@PokemonEncountered.Name" Width="50%" Height="auto" />
-                <MudElement HtmlTag="p">Type: @PokemonEncountered.Type</MudElement>
-                <MudElement HtmlTag="p">Weight: @PokemonEncountered.Weight lbs</MudElement>
-                <MudButton Variant="Variant.Filled" Color="Color.Error">Catch</MudButton>
-                <MudButton Variant="Variant.Filled" Color="Color.Info">Run</MudButton>
+                            {
+                                <MudIcon Icon="@Icons.Material.Filled.Female" Color="Color.Secondary" />
+                            }
+                            @if (PokemonEncountered.IsShiny)
+                            {
+                                <MudIcon Icon="@Icons.Material.Filled.Star" Color="Color.Warning" />
+                            }
+                        </MudElement>
+                    </MudItem>
+                    <MudFlexBreak />
+                    <MudItem>
+                        <div class="d-flex justify-center">
+                            <MudImage Src="@PokemonImage" Alt="@PokemonName" Style="width: 75%; height: auto;" />
+                        </div>
+                    </MudItem>
+                    <MudFlexBreak />
+                    <MudItem>
+                        <MudText>Type: @PokemonEncountered.Type1</MudText>
+                    </MudItem>
+                    <MudFlexBreak />
+                    <MudItem>
+                        <MudText>Weight: @PokemonEncountered.Weight lbs</MudText>
+                    </MudItem>
+                    <MudFlexBreak />
+                    <MudItem>
+                        <MudButton Variant="Variant.Filled" Color="Color.Error" OnClick="OpenCatchDialogAsync">Catch</MudButton>
+                        <MudButton Variant="Variant.Filled" Color="Color.Info" OnClick="Run">Run</MudButton>
+                    </MudItem>
+                    <MudFlexBreak />
+                    <MudItem></MudItem>
+                </MudGrid>
+                
             </MudPaper>
         </MudItem>
     }
+
+    <MudFlexBreak />
+    <MudItem></MudItem>
 
 </MudGrid>
 
 
 
-
-
 @code {
     private bool Searching = false;
+    private string PokemonImage { get; set; }
+    private string PokemonName { get; set; }
     private Pokemon PokemonEncountered { get; set; }
     private PokemonReference[] NativePokemon = { PokemonReference.AllPokemon[0] };
     private PokemonReference Selected { get; set; }
 
     Random rand = new Random();
-
 
     private void Encounter()
     {
@@ -58,5 +85,86 @@
         Selected = NativePokemon[0];
 
         PokemonEncountered = Pokemon.CreatePokemon(Selected);
+
+        PokemonImage = PokemonEncountered.Image;
+        PokemonName = PokemonEncountered.Name;
+        StateHasChanged();
+    }
+
+    private void Run()
+    {
+        Searching = false;
+    }
+
+    private async Task TryCatch(Pokeball Ball)
+    {
+        Ball.Number -= 1;
+
+        int Shakes = 0;
+
+        PokemonImage = Ball.Image;
+        PokemonName = Ball.Name;
+        StateHasChanged();
+
+        while (Shakes <= 3)
+        {
+            await Task.Delay(2000);
+
+            int CatchNum = rand.Next(1, 1001);
+            int ChanceNum = 1000 - ((int)Math.Floor((Selected.CatchRate * Ball.CatchChance) * 10));
+
+            if (CatchNum >= ChanceNum)
+            {
+                Shakes += 1;
+
+                if (Shakes != 4)
+                {
+                    string ShakingMessage = "Shaking";
+
+                    for (int i = 0; i < Shakes; i++)
+                    {
+                        ShakingMessage += ".";
+                    }
+
+                    Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomLeft;
+                    Snackbar.Add(ShakingMessage, Severity.Warning);
+                }
+            } else
+            {
+                Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomLeft;
+                Snackbar.Add(PokemonEncountered.Name + " escaped!", Severity.Error);
+
+                PokemonImage = PokemonEncountered.Image;
+                PokemonName = PokemonEncountered.Name;
+                StateHasChanged();
+
+                break;
+            }
+        }
+
+        if (Shakes == 4)
+        {
+            Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomLeft;
+            Snackbar.Add("Caught!!!", Severity.Success);
+
+            await Task.Delay(2000);
+
+            Searching = false;
+            StateHasChanged();
+        }
+    }
+
+    private async Task OpenCatchDialogAsync()
+    {
+        var options = new DialogOptions { CloseOnEscapeKey = true };
+
+        var DialogCatch = await DialogService.ShowAsync<CatchDialog>("Catch Dialog", options);
+        var DialogResult = await DialogCatch.Result;
+
+        if (!DialogResult.Canceled)
+        {
+            Pokeball SelectedBall = await DialogCatch.GetReturnValueAsync<Pokeball>();
+            TryCatch(SelectedBall);
+        }
     }
 }
