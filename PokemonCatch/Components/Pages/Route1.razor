@@ -50,6 +50,10 @@
                     </MudItem>
                     <MudFlexBreak />
                     <MudItem>
+                        <MudText>Height: @PokemonEncountered.Height</MudText>
+                    </MudItem>
+                    <MudFlexBreak />
+                    <MudItem>
                         <MudButton Variant="Variant.Filled" Color="Color.Error" OnClick="OpenCatchDialogAsync">Catch</MudButton>
                         <MudButton Variant="Variant.Filled" Color="Color.Info" OnClick="Run">Run</MudButton>
                     </MudItem>
@@ -146,6 +150,7 @@
         {
             Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomLeft;
             Snackbar.Add("Caught!!!", Severity.Success);
+            Game.User.PokemonCaught.Add(PokemonEncountered);
 
             await Task.Delay(2000);
 

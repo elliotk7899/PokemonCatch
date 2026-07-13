@@ -10,28 +10,28 @@
         {
             new Pokeball()
             {
-                Name = "Pokeball",
+                Name = "Poke Ball",
                 CatchChance = 1,
                 Number = 5,
                 Image = "https://www.serebii.net/itemdex/sprites/sv/pokeball.png"
             },
             new Pokeball()
             {
-                Name = "Greatball",
+                Name = "Great Ball",
                 CatchChance = 1.5,
                 Number = 0
             },
             new Pokeball()
             {
-                Name = "Ultraball",
+                Name = "Ultra Ball",
                 CatchChance = 2,
                 Number = 0
             },
             new Pokeball()
             {
-                Name = "Masterball",
+                Name = "Master Ball",
                 CatchChance = 8,
-                Number = 0
+                Number = 10
             }
         };
 

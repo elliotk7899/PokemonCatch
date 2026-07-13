@@ -4,13 +4,15 @@
     {
         public string Name { get; set; }
         public double Weight { get; set; }
-        public double Height { get; set; }
+        public string Height { get; set; }
         public PokemonType Type1 { get; set; }
         public string Gender { get; set; }
 
         public bool IsShiny = false;
         public string Image { get; set; }
-        public PokemonType Type2 { get; set; }
+
+        public PokemonType? Type2 = null;
+        public string TypeName { get; set; }
         
         public static Pokemon CreatePokemon(PokemonReference Reference)
         {
@@ -19,10 +21,11 @@
             Pokemon NewPokemon = new Pokemon()
             {
                 Name = Reference.Name,
-                Weight = Reference.Weight,
                 Height = Reference.Height,
                 Type1 = Reference.Type
             };
+
+            NewPokemon.Weight = Math.Round(Reference.Weight + (rand.Next(-50, 51) / 10.0), 1);
 
             if (Reference.HasGender)
             {
@@ -43,9 +46,14 @@
             if (Reference.HasTwoTypes)
             {
                 NewPokemon.Type2 = Reference.Type2;
+
+                NewPokemon.TypeName = NewPokemon.Type1 + "/" + NewPokemon.Type2;
+            } else
+            {
+                NewPokemon.TypeName = NewPokemon.Type1.ToString();
             }
 
-            if (rand.Next(1, 4096) == 4096)
+            if (rand.Next(1, 3) == 2) //4097
             {
                 NewPokemon.IsShiny = true;
             } else

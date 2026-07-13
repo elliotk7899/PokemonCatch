@@ -1,0 +1,56 @@
+﻿@page "/shop"
+@inject IDialogService DialogService
+@inject ISnackbar Snackbar
+
+<h3>Shop</h3>
+
+<MudGrid Justify="Justify.Center">
+    @foreach (var Ball in Pokeball.AllPokeBalls)
+    {
+        <MudItem xs="3">
+            <MudPaper>
+                <MudStack>
+                    <MudText Typo="Typo.h3">@Ball.Name</MudText>
+                    <MudImage Src="@Ball.Image" Alt="@Ball.Name" Style="width: 300px; height: auto;" />
+                    <MudText>@Ball.Description</MudText>
+                    <MudButton Variant="Variant.Filled" Color="Color.Success" OnClick="OpenBuyDialogAsync">Buy ($@Ball.Price)</MudButton>
+                </MudStack>
+            </MudPaper>
+        </MudItem>
+    }
+</MudGrid>
+
+    @code {
+    private Pokeball SelectedBall;
+
+    private void Buy(int Amount)
+    {
+        int Cost = Amount * SelectedBall.Price;
+
+        if (Game.User.Money >= Cost)
+        {
+            Game.User.Money -= Cost;
+            Game.User.Bag[Pokeball.AllPokeBalls.IndexOf(SelectedBall)].Number += Amount; 
+
+            Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomLeft;
+            Snackbar.Add("Purchased", Severity.Success);
+        } else
+        {
+            
+        }
+    }
+
+    private async Task OpenBuyDialogAsync()
+    {
+        var options = new DialogOptions { CloseOnEscapeKey = true };
+
+        var DialogShop = await DialogService.ShowAsync<ShopDialog>("Shop Dialog", options);
+        var DialogResult = await DialogShop.Result;
+
+        if (!DialogResult.Canceled)
+        {
+            int Quantity = await DialogShop.GetReturnValueAsync<int>();
+            Buy(Quantity);
+        }
+    }
+}

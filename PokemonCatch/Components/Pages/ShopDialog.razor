@@ -1,0 +1,22 @@
+﻿<MudDialog>
+    <TitleContent>
+        How many would you like to buy?
+    </TitleContent>
+    <DialogContent>
+        <MudNumericField @bind-Value="Quantity" Label="Quantity" Variant="Variant.Outlined" Min="1" Max="99" />
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Cancel</MudButton>
+        <MudButton Variant="Variant.Filled" Color="Color.Success" OnClick="Buy">Buy</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    private int Quantity = 1;
+
+    [CascadingParameter] private IMudDialogInstance MudDialog { get; set; }
+
+    private void Buy() => MudDialog.Close(DialogResult.Ok(Quantity));
+
+    private void Cancel() => MudDialog.Cancel();
+}
