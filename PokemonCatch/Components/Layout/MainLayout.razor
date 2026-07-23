@@ -1,7 +1,8 @@
 ﻿@inherits LayoutComponentBase
+@using Classes
 
 @* Required *@
-<MudThemeProvider />
+<MudThemeProvider Theme="PokemonTheme" />
 <MudPopoverProvider />
 
 @* Needed for dialogs *@
@@ -16,8 +17,8 @@
     </div>
 
     <main>
-        <div class="top-row px-4">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
+        <div class="top-row px-4" style="background-color: ivory;">
+            <MudText>Trainer&nbsp;@Game.User.Name&nbsp;&nbsp;&nbsp;Level:&nbsp;@Game.User.PlayerLevel.LevelNum&nbsp;&nbsp;&nbsp;$@Game.User.Money</MudText>
         </div>
 
         <article class="content px-4">
@@ -31,3 +32,25 @@
     <a href="." class="reload">Reload</a>
     <span class="dismiss">🗙</span>
 </div>
+
+@code {
+    MudTheme PokemonTheme = new MudTheme()
+    {
+        PaletteLight = new PaletteLight()
+        {
+            Primary = Colors.Red.Default,
+            Secondary = Colors.Pink.Default,
+            AppbarBackground = Colors.Red.Default,
+        },
+        PaletteDark = new PaletteDark()
+        {
+            Primary = Colors.Red.Default
+        },
+
+        LayoutProperties = new LayoutProperties()
+        {
+            DrawerWidthLeft = "260px",
+            DrawerWidthRight = "300px"
+        }
+    };
+}

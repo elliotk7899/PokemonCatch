@@ -1,0 +1,41 @@
+﻿@page "/PokeDex"
+@using Classes
+
+<style>
+    body {
+        background-color: lightcoral;
+    }
+</style>
+
+<h3 style="color: white; text-align: center; text-decoration: underline;">PokeDex</h3>
+
+<MudGrid>
+    @foreach (var Reference in PokemonReference.AllPokemon)
+    {
+        @if (PokemonReference.PokemonFoundInList(Reference, Game.User.PokemonEntered))
+        {
+            <MudItem xs="2">
+                <MudPaper>
+                    <MudText Style="text-align: center;">@Reference.PokeDexNum</MudText>
+                    <MudImage Src="@($"Images/{Reference.Name}Image.png")" Alt="@Reference.Name" Style="width: 100px; height: auto; display: block; margin-left: auto; margin-right: auto;" />
+                    <MudText Style="text-align: center;">@Reference.Name</MudText>
+                </MudPaper>
+            </MudItem>
+        } else
+        {
+            <MudItem xs="2">
+                <MudPaper>
+                    <MudText Style="text-align: center;">@Reference.PokeDexNum</MudText>
+                    <MudImage Src="Images/Other/QuestionMark.webp" Alt="Mystery" Style="width: 100px; height: auto; display: block; margin-left: auto; margin-right: auto;" />
+                    <MudText Style="text-align: center;">???</MudText>
+                </MudPaper>
+            </MudItem>
+        }
+
+    }
+</MudGrid>
+
+
+@code {
+
+}

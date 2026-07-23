@@ -1,7 +1,68 @@
 ﻿@page "/"
+@using Classes
 
 <PageTitle>Home</PageTitle>
 
-<h1>Hello, world!</h1>
+<style>
+    body {
+        background-color: antiquewhite;
+    }
+</style>
 
-Welcome to your new app.
+<MudGrid>
+    <MudItem xs="12">
+        <MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true" TabPanelsClass="pa-6" Style="background-color: white;">
+            <MudTabPanel Text="Player Info">
+                <MudStack Row="true">
+                    <MudText Typo="Typo.h4">Tranier @Game.User.Name</MudText>
+                    <MudSpacer />
+                    <MudText Style="color: forestgreen;" Typo="Typo.h4">$@Game.User.Money</MudText>
+                </MudStack>
+            </MudTabPanel>
+            <MudTabPanel Text="Bag">
+                <MudStack Row="true" Justify="Justify.Center">
+                    @foreach (var Ball in Game.User.Bag)
+                    {
+                        <MudText Typo="Typo.h5">@Ball.Name (@Ball.Number)</MudText>
+                    }
+                </MudStack>
+            </MudTabPanel>
+        </MudTabs>
+    </MudItem>
+
+    <MudItem xs="4">
+        <MudProgressCircular Style="height: 300px; width: 300px; display: block; margin-left: auto; margin-right: auto;" Color="Color.Error" Value="@Game.User.PokemonEntered.Count" Min="0" Max="@PokemonReference.AllPokemon.Length">
+            <ChildContent>
+                <MudStack Spacing="0" AlignItems="AlignItems.Center" Justify="Justify.Center">
+                    <MudText Typo="Typo.subtitle2">Pokemon Caught</MudText>
+                    <MudText Typo="Typo.subtitle2">@Game.User.PokemonEntered.Count / @PokemonReference.AllPokemon.Length</MudText>
+                </MudStack>
+            </ChildContent>
+        </MudProgressCircular>
+    </MudItem>
+
+    <MudItem xs="4">
+        <MudProgressCircular Style="height: 300px; width: 300px; display: block; margin-left: auto; margin-right: auto;" Color="Color.Success" Value="@(WildArea.NumAreasUnlocked(Game.User.PlayerLevel.LevelNum))" Min="0" Max="@WildArea.Areas.Length">
+            <ChildContent>
+                <MudStack Spacing="0" AlignItems="AlignItems.Center" Justify="Justify.Center">
+                    <MudText Typo="Typo.subtitle2">Areas Unlocked</MudText>
+                    <MudText Typo="Typo.subtitle2">@WildArea.NumAreasUnlocked(Game.User.PlayerLevel.LevelNum) / @WildArea.Areas.Length</MudText>
+                </MudStack>
+            </ChildContent>
+        </MudProgressCircular>
+    </MudItem>
+
+    <MudItem xs="4">
+        <MudProgressCircular Style="height: 300px; width: 300px; display: block; margin-left: auto; margin-right: auto;" Color="Color.Info" Value="@Game.User.PlayerLevel.Xp" Min="0" Max="@(Game.User.PlayerLevel.LevelNum * 25)">
+            <ChildContent>
+                <MudStack Spacing="0" AlignItems="AlignItems.Center" Justify="Justify.Center">
+                    <MudText Typo="Typo.subtitle2">Level</MudText>
+                    <MudText Typo="Typo.h3">@Game.User.PlayerLevel.LevelNum</MudText>
+                </MudStack>
+            </ChildContent>
+        </MudProgressCircular>
+    </MudItem>
+</MudGrid>
+
+
+

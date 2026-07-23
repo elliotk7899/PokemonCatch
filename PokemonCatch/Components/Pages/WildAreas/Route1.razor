@@ -1,13 +1,19 @@
 ﻿@page "/route1"
+@using Classes
 @inject IDialogService DialogService
 @inject ISnackbar Snackbar
 
+<style>
+    body {
+        background-color: lightgreen;
+    }
+</style>
 
 <MudGrid Justify="Justify.Center">
 
-    <MudItem><h3>Route 1</h3></MudItem>
+    <MudItem><h2 style="text-decoration: underline;">Route 1</h2></MudItem>
     <MudFlexBreak />
-    <MudItem><MudButton Variant="Variant.Filled" Color="Color.Success" Disabled="@Searching" OnClick="Encounter">Search</MudButton></MudItem>
+    <MudItem><MudButton Variant="Variant.Filled" Color="Color.Info" Disabled="@Searching" OnClick="Encounter">Search</MudButton></MudItem>
 
     <MudFlexBreak />
     <MudItem></MudItem>
@@ -16,7 +22,7 @@
     @if(Searching)
     {
         <MudItem xs="6">
-            <MudPaper>
+            <MudPaper Style="background-color: rgb(214, 250, 193)">
                 <MudGrid Justify="Justify.Center">
                     <MudItem>
                         <MudElement HtmlTag="h3">
@@ -42,7 +48,7 @@
                     </MudItem>
                     <MudFlexBreak />
                     <MudItem>
-                        <MudText>Type: @PokemonEncountered.Type1</MudText>
+                        <MudText>Type: @PokemonEncountered.TypeName</MudText>
                     </MudItem>
                     <MudFlexBreak />
                     <MudItem>
@@ -54,8 +60,8 @@
                     </MudItem>
                     <MudFlexBreak />
                     <MudItem>
-                        <MudButton Variant="Variant.Filled" Color="Color.Error" OnClick="OpenCatchDialogAsync">Catch</MudButton>
-                        <MudButton Variant="Variant.Filled" Color="Color.Info" OnClick="Run">Run</MudButton>
+                        <MudButton Variant="Variant.Filled" Color="Color.Info" OnClick="OpenCatchDialogAsync" Disabled="@Catching">Catch</MudButton>
+                        <MudButton Variant="Variant.Filled" Color="Color.Error" OnClick="Run" Disabled="@Catching">Run</MudButton>
                     </MudItem>
                     <MudFlexBreak />
                     <MudItem></MudItem>
@@ -74,6 +80,7 @@
 
 @code {
     private bool Searching = false;
+    private bool Catching = false;
     private string PokemonImage { get; set; }
     private string PokemonName { get; set; }
     private Pokemon PokemonEncountered { get; set; }
@@ -102,6 +109,8 @@
 
     private async Task TryCatch(Pokeball Ball)
     {
+        Catching = true;
+
         Ball.Number -= 1;
 
         int Shakes = 0;
@@ -109,6 +118,8 @@
         PokemonImage = Ball.Image;
         PokemonName = Ball.Name;
         StateHasChanged();
+
+        Snackbar.Clear();
 
         while (Shakes <= 3)
         {
@@ -150,13 +161,23 @@
         {
             Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomLeft;
             Snackbar.Add("Caught!!!", Severity.Success);
+
+            if (!PokemonReference.PokemonFoundInList(Selected, Game.User.PokemonEntered))
+            {
+                Game.User.PokemonEntered.Add(Selected);
+            }
+
             Game.User.PokemonCaught.Add(PokemonEncountered);
+
+            Game.User.PlayerLevel.AddExp(Selected.Value);
 
             await Task.Delay(2000);
 
             Searching = false;
-            StateHasChanged();
         }
+
+        Catching = false;
+        StateHasChanged();
     }
 
     private async Task OpenCatchDialogAsync()

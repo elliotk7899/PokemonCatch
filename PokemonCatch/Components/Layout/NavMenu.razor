@@ -1,12 +1,12 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
+﻿<div class="top-row ps-3 navbar navbar-dark" style="background-color: darkred;">
     <div class="container-fluid">
-        <a class="navbar-brand" href="">PokemonCatch</a>
+        <a class="navbar-brand" href="">Pokemon Web Catch</a>
     </div>
 </div>
 
 <input type="checkbox" title="Navigation menu" class="navbar-toggler" />
 
-<div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
+<div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()" style="background-color: rgb(107, 4, 4);">
     <nav class="nav flex-column">
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
@@ -17,6 +17,12 @@
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="pokemon">
                 <MudIcon Icon="@Icons.Material.Filled.CatchingPokemon" />&nbsp;&nbsp;Pokemon
+            </NavLink>
+        </div>
+
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="pokedex">
+                <MudIcon Icon="@Icons.Material.Filled.Dataset" />&nbsp;&nbsp;PokeDex
             </NavLink>
         </div>
 

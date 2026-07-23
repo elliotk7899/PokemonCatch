@@ -1,4 +1,4 @@
-﻿namespace PokemonCatch
+﻿namespace PokemonCatch.Classes
 {
     public class Pokemon
     {
@@ -10,6 +10,7 @@
 
         public bool IsShiny = false;
         public string Image { get; set; }
+        public int Value { get; set; }
 
         public PokemonType? Type2 = null;
         public string TypeName { get; set; }
@@ -63,12 +64,14 @@
 
             if (NewPokemon.IsShiny)
             {
-                NewPokemon.Image = Reference.ShinyImage;
+                NewPokemon.Image = "Images/" + Reference.Name + "ShinyImage.png";
             }
             else
             {
-                NewPokemon.Image = Reference.Image;
+                NewPokemon.Image = "Images/" + Reference.Name + "Image.png";
             }
+
+            NewPokemon.Value = (int)(Math.Round(Reference.Value * (NewPokemon.Weight / Reference.Weight)));
 
             return NewPokemon;
         }

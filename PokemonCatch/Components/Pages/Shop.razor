@@ -1,19 +1,29 @@
 ﻿@page "/shop"
+@using Classes
 @inject IDialogService DialogService
 @inject ISnackbar Snackbar
 
-<h3>Shop</h3>
+<style>
+    body {
+        background-color: lightblue;
+    }
+</style>
 
 <MudGrid Justify="Justify.Center">
+    <MudText Typo="Typo.h3" Style="text-align: center; text-decoration: underline;">Shop</MudText>
+    <MudFlexBreak />
+
     @foreach (var Ball in Pokeball.AllPokeBalls)
     {
         <MudItem xs="3">
-            <MudPaper>
-                <MudStack>
-                    <MudText Typo="Typo.h3">@Ball.Name</MudText>
-                    <MudImage Src="@Ball.Image" Alt="@Ball.Name" Style="width: 300px; height: auto;" />
-                    <MudText>@Ball.Description</MudText>
-                    <MudButton Variant="Variant.Filled" Color="Color.Success" OnClick="OpenBuyDialogAsync">Buy ($@Ball.Price)</MudButton>
+            <MudPaper Class="pa-2" Style="background-color: antiquewhite;">
+                <MudStack Justify="Justify.Center">
+                    <MudText Typo="Typo.h4" Style="text-align: center;">@Ball.Name</MudText>
+                    <MudImage Src="@Ball.Image" Alt="@Ball.Name" Style="width: 300px; height: auto; margin-left: -10px" />
+                    <MudItem Style="height: 100px;">
+                        <MudText>@Ball.Description</MudText>
+                    </MudItem>
+                    <MudButton Variant="Variant.Filled" Color="Color.Success" OnClick="() => OpenBuyDialogAsync(Ball)">Buy ($@Ball.Price)</MudButton>
                 </MudStack>
             </MudPaper>
         </MudItem>
@@ -25,6 +35,8 @@
 
     private void Buy(int Amount)
     {
+        Snackbar.Clear();
+
         int Cost = Amount * SelectedBall.Price;
 
         if (Game.User.Money >= Cost)
@@ -32,19 +44,30 @@
             Game.User.Money -= Cost;
             Game.User.Bag[Pokeball.AllPokeBalls.IndexOf(SelectedBall)].Number += Amount; 
 
-            Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomLeft;
-            Snackbar.Add("Purchased", Severity.Success);
+            if (Amount > 1)
+            {
+                Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomLeft;
+                Snackbar.Add("Purchased " + Amount + " " + SelectedBall.Name + "s!", Severity.Success);
+            } else
+            {
+                Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomLeft;
+                Snackbar.Add("Purchased " + Amount + " " + SelectedBall.Name + "!", Severity.Success);
+            }
+            
         } else
         {
-            
+            Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomLeft;
+            Snackbar.Add("Not enough money!", Severity.Error);
         }
     }
 
-    private async Task OpenBuyDialogAsync()
+    private async Task OpenBuyDialogAsync(Pokeball ChosenBall)
     {
-        var options = new DialogOptions { CloseOnEscapeKey = true };
+        SelectedBall = ChosenBall;
 
-        var DialogShop = await DialogService.ShowAsync<ShopDialog>("Shop Dialog", options);
+        var parameters = new DialogParameters<ShopDialog> { { x => x.SelectedBall, SelectedBall } };
+
+        var DialogShop = await DialogService.ShowAsync<ShopDialog>("Shop Dialog", parameters);
         var DialogResult = await DialogShop.Result;
 
         if (!DialogResult.Canceled)

@@ -1,0 +1,29 @@
+﻿@page "/wildarea"
+@using Classes
+
+<style>
+    body {
+        background-color: lightgreen;
+    }
+</style>
+
+<MudTable Items="@WildArea.Areas" Hover="true" Style="background-color: antiquewhite;">
+    <ToolBarContent>
+        <MudText Typo="Typo.h6">Wild Area</MudText>
+    </ToolBarContent>
+    <HeaderContent>
+        <MudTh>Area</MudTh>
+        <MudTh>Level Needed</MudTh>
+        <MudTh></MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Area">@context.Name</MudTd>
+        <MudTd DataLabel="Level Needed">@context.RequiredLevel</MudTd>
+        <MudTd><MudButton Href="@context.Link" Variant="Variant.Filled" Color="Color.Success" Style="display: flex; align-content: end;">Go</MudButton></MudTd>
+    </RowTemplate>
+</MudTable>
+
+
+@code {
+
+}

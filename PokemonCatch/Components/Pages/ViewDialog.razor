@@ -1,0 +1,72 @@
+﻿@using Classes
+@inject ISnackbar Snackbar
+
+<MudDialog>
+    <TitleContent>
+
+    </TitleContent>
+    <DialogContent>
+        <MudGrid Justify="Justify.Center">
+            <MudItem>
+                <MudElement HtmlTag="h3">
+                    @Chosen.Name&nbsp;@if(Chosen.Gender == "Male")
+                    {
+                        <MudIcon Icon="@Icons.Material.Filled.Male" Color="Color.Info" />
+                    }
+                    else if (Chosen.Gender == "Female")
+                    {
+                        <MudIcon Icon="@Icons.Material.Filled.Female" Color="Color.Secondary" />
+                    }
+                    @if (Chosen.IsShiny)
+                    {
+                        <MudIcon Icon="@Icons.Material.Filled.Star" Color="Color.Warning" />
+                    }
+                </MudElement>
+            </MudItem>
+            <MudFlexBreak />
+            <MudItem>
+                <div class="d-flex justify-center">
+                    <MudImage Src="@Chosen.Image" Alt="@Chosen.Name" Style="width: 50%; height: auto;" />
+                </div>
+            </MudItem>
+            <MudFlexBreak />
+            <MudItem>
+                <MudText>Type: @Chosen.TypeName</MudText>
+            </MudItem>
+            <MudFlexBreak />
+            <MudItem>
+                <MudText>Weight: @Chosen.Weight lbs</MudText>
+            </MudItem>
+            <MudFlexBreak />
+            <MudItem>
+                <MudText>Height: @Chosen.Height</MudText>
+            </MudItem>
+        </MudGrid>
+    </DialogContent>
+    <DialogActions>
+        <MudButton Variant="Variant.Filled" Color="Color.Error" OnClick="Sell">Sell ($@Chosen.Value)</MudButton>
+        <MudButton Variant="Variant.Filled" Color="Color.Info" OnClick="Cancel">Close</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+
+    [CascadingParameter] private IMudDialogInstance MudDialog { get; set; }
+
+    [Parameter] public Pokemon Chosen { get; set; }
+
+    private void Sell()
+    {
+        Game.User.Money += Chosen.Value;
+        Game.User.PokemonCaught.Remove(Chosen);
+
+        Snackbar.Clear();
+
+        Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomLeft;
+        Snackbar.Add($"{Chosen.Name} has been sold for ${Chosen.Value}!", Severity.Error);
+
+        MudDialog.Close(DialogResult.Ok(true));
+    }
+
+    private void Cancel() => MudDialog.Cancel();
+}

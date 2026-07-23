@@ -1,14 +1,26 @@
 ﻿@page "/pokemon"
+@using Classes
+@inject IDialogService DialogService
 
-<h3>Pokemon</h3>
+<style>
+    body {
+        background-color: lightblue;
+    }
+</style>
 
-<MudTable Items="Game.User.PokemonCaught" Hover="true">
+<MudTable Items="Game.User.PokemonCaught" Hover="true" Filter="new Func<Pokemon, bool>(FilterFunc1)" Style="background-color: antiquewhite;">
+    <ToolBarContent>
+        <MudText Typo="Typo.h6">Pokemon</MudText>
+        <MudSpacer />
+        <MudTextField @bind-Value="searchString1" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+    </ToolBarContent>
     <HeaderContent>
         <MudTh><MudTableSortLabel SortBy="new Func<Pokemon, object>(x => x.Name)">Name</MudTableSortLabel></MudTh>
         <MudTh><MudTableSortLabel SortBy="new Func<Pokemon, object>(x => x.TypeName)">Type</MudTableSortLabel></MudTh>
         <MudTh><MudTableSortLabel SortBy="new Func<Pokemon, object>(x => x.Gender)">Gender</MudTableSortLabel></MudTh>
         <MudTh><MudTableSortLabel SortBy="new Func<Pokemon, object>(x => x.Weight)">Weight</MudTableSortLabel></MudTh>
         <MudTh><MudTableSortLabel SortBy="new Func<Pokemon, object>(x => x.Height)">Height</MudTableSortLabel></MudTh>
+        <MudTh></MudTh>
     </HeaderContent>
     <RowTemplate>
         @if (context.IsShiny)
@@ -35,10 +47,45 @@
 
         <MudTd DataLabel="Weight">@context.Weight lbs</MudTd>
         <MudTd DataLabel="Height">@context.Height</MudTd>
+        <MudTd DataLabel="View" Class="text-end"><MudButton Variant="Variant.Filled" Color="Color.Success" OnClick="() => OpenViewDialogAsync(context)">View</MudButton></MudTd>
     </RowTemplate>
-    @* Add two buttons, one to view, and one to sell with a confirmation dialog and the amount sold in the button name. *@
+    <PagerContent>
+        <MudTablePager PageSizeOptions="new int[] { 10, 25, 50, 100, int.MaxValue }"RowsPerPageString="Pokemon per page:" />
+    </PagerContent>
 </MudTable>
 
 @code {
+    private string searchString1 = "";
 
+    private bool FilterFunc1(Pokemon element) => FilterFunc(element, searchString1);
+
+    private bool FilterFunc(Pokemon element, string searchString)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (element.Name.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.TypeName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.Gender.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.Height.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if ($"{element.Weight}".Contains(searchString))
+            return true;
+        return false;
+    }
+
+    private async Task OpenViewDialogAsync(Pokemon Selected)
+    {
+        var parameters = new DialogParameters<ViewDialog> { { x => x.Chosen, Selected } };
+
+        var DialogView = await DialogService.ShowAsync<ViewDialog>("View Dialog", parameters);
+        var DialogResult = await DialogView.Result;
+
+        if (!DialogResult.Canceled)
+        {
+            StateHasChanged();
+        }
+    }
 }

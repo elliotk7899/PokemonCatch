@@ -1,4 +1,4 @@
-﻿namespace PokemonCatch
+﻿namespace PokemonCatch.Classes
 {
     public class PokemonReference
     {
@@ -8,9 +8,8 @@
                 Weight = 13.2,
                 Height = "1\' 04\"",
                 Type = PokemonType.Electric,
+                PokeDexNum = 25,
                 HasGender = true,
-                Image = "https://www.pokemon.com/static-assets/content-assets/cms2/img/pokedex/full/025.png",
-                ShinyImage = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/shiny/25.png",
                 CatchRate = 75
             }
         };
@@ -19,10 +18,10 @@
         public double Weight { get; set; }
         public string Height { get; set; }
         public PokemonType Type { get; set; }
+        public int PokeDexNum { get; set; }
         public bool HasGender { get; set; }
-        public string Image { get; set; }
-        public string ShinyImage { get; set; }
         public double CatchRate { get; set; }
+        public int Value { get; set; } = 10;
         public bool HasTwoTypes = false;
 
         public PokemonType? Type2 = null;
@@ -39,6 +38,33 @@
             }
 
             return null;
+        }
+
+        public static PokemonReference FindPokemonByDex(int Num)
+        {
+            Console.WriteLine(Num);
+            foreach (var Reference in AllPokemon)
+            {
+                if (Reference.PokeDexNum == Num)
+                {
+                    return Reference;
+                }
+            }
+
+            return null;
+        }
+
+        public static bool PokemonFoundInList(PokemonReference Target, List<PokemonReference> GivenList)
+        {
+            foreach (var Reference in GivenList)
+            {
+                if (Reference == Target)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }

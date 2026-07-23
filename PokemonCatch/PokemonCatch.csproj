@@ -8,11 +8,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MudBlazor" Version="9.6.0" />
+    <None Include="wwwroot\Images\PikachuImage.png" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Components\Pages\Images\" />
+    <PackageReference Include="MudBlazor" Version="9.6.0" />
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,6 @@
-﻿<MudDialog>
+﻿@using Classes
+
+<MudDialog>
     <TitleContent>
         How many would you like to buy?
     </TitleContent>
@@ -7,7 +9,7 @@
     </DialogContent>
     <DialogActions>
         <MudButton OnClick="Cancel">Cancel</MudButton>
-        <MudButton Variant="Variant.Filled" Color="Color.Success" OnClick="Buy">Buy</MudButton>
+        <MudButton Variant="Variant.Filled" Color="Color.Success" OnClick="Buy">Buy (@(SelectedBall.Price * Quantity))</MudButton>
     </DialogActions>
 </MudDialog>
 
@@ -15,6 +17,8 @@
     private int Quantity = 1;
 
     [CascadingParameter] private IMudDialogInstance MudDialog { get; set; }
+
+    [Parameter] public Pokeball SelectedBall { get; set; }
 
     private void Buy() => MudDialog.Close(DialogResult.Ok(Quantity));
 
