@@ -30,13 +30,20 @@
 
             if (Reference.HasGender)
             {
-                if (rand.Next(1, 3) == 1)
+                if (Reference.HasSetGender)
                 {
-                    NewPokemon.Gender = "Male";
-                }
+                    NewPokemon.Gender = Reference.SetGender;
+                } 
                 else
                 {
-                    NewPokemon.Gender = "Female";
+                    if (rand.Next(1, 3) == 1)
+                    {
+                        NewPokemon.Gender = "Male";
+                    }
+                    else
+                    {
+                        NewPokemon.Gender = "Female";
+                    }
                 }
             }
             else
@@ -54,7 +61,7 @@
                 NewPokemon.TypeName = NewPokemon.Type1.ToString();
             }
 
-            if (rand.Next(1, 3) == 2) //4097
+            if (rand.Next(1, 4097) == 4098) // Will never happen because they're aren't any images for shiny pokemon yet.
             {
                 NewPokemon.IsShiny = true;
             } else

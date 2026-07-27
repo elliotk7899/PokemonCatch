@@ -93,6 +93,43 @@
     {
         Searching = true;
 
+        double NativeValue = 0;
+        var EncounterList = new List<PokemonReference>();
+        var LegendaryList = new List<PokemonReference>();
+
+        foreach (var HomePokemon in NativePokemon)
+        {
+            if (HomePokemon.Value < 975)
+            {
+                NativeValue += HomePokemon.Value;
+            }
+        }
+
+        foreach (var HomePokemon in NativePokemon)
+        {
+            if (HomePokemon.Value >= 975)
+            {
+                LegendaryList.Add(HomePokemon);
+            } else
+            {
+                int Chance = (int)(Math.Round((1000 - ((HomePokemon.Value / NativeValue) * 100))));
+
+                for (int i = 0; i < Chance; i++)
+                {
+                    EncounterList.Add(HomePokemon);
+                }
+            }
+        }
+
+        if (LegendaryList.Count > 0)
+        {
+
+        } else
+        {
+            
+        }
+
+
         Selected = NativePokemon[0];
 
         PokemonEncountered = Pokemon.CreatePokemon(Selected);

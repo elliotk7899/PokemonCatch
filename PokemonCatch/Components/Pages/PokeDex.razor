@@ -8,6 +8,7 @@
 </style>
 
 <h3 style="color: white; text-align: center; text-decoration: underline;">PokeDex</h3>
+<br>
 
 <MudGrid>
     @foreach (var Reference in PokemonReference.AllPokemon)
@@ -17,7 +18,7 @@
             <MudItem xs="2">
                 <MudPaper>
                     <MudText Style="text-align: center;">@Reference.PokeDexNum</MudText>
-                    <MudImage Src="@($"Images/{Reference.Name}Image.png")" Alt="@Reference.Name" Style="width: 100px; height: auto; display: block; margin-left: auto; margin-right: auto;" />
+                    <MudImage Src="@($"Images/PokemonImages/{Reference.Name}Image.png")" Alt="@Reference.Name" Style="width: 100px; height: auto; display: block; margin-left: auto; margin-right: auto;" />
                     <MudText Style="text-align: center;">@Reference.Name</MudText>
                 </MudPaper>
             </MudItem>
@@ -34,6 +35,8 @@
 
     }
 </MudGrid>
+
+<br>
 
 
 @code {

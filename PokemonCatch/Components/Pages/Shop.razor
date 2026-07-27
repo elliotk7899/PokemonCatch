@@ -9,10 +9,11 @@
     }
 </style>
 
-<MudGrid Justify="Justify.Center">
-    <MudText Typo="Typo.h3" Style="text-align: center; text-decoration: underline;">Shop</MudText>
-    <MudFlexBreak />
+<MudText Typo="Typo.h3" Style="text-align: center; text-decoration: underline;">Shop</MudText>
 
+<br>
+
+<MudGrid Justify="Justify.Center">
     @foreach (var Ball in Pokeball.AllPokeBalls)
     {
         <MudItem xs="3">
@@ -30,7 +31,9 @@
     }
 </MudGrid>
 
-    @code {
+<br>
+
+@code {
     private Pokeball SelectedBall;
 
     private void Buy(int Amount)
