@@ -9,10 +9,10 @@
         public List<PokemonReference> PokemonEntered { get; set; }
         public Pokeball[] Bag =
         {
-            Pokeball.AddBallItem("Poke Ball", 15),
+            Pokeball.AddBallItem("Poke Ball", 5),
             Pokeball.AddBallItem("Great Ball", 0),
             Pokeball.AddBallItem("Ultra Ball", 0),
-            Pokeball.AddBallItem("Master Ball", 10)
+            Pokeball.AddBallItem("Master Ball", 0)
         };
 
     }

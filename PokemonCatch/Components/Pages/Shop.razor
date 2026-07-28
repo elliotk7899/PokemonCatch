@@ -36,6 +36,15 @@
 @code {
     private Pokeball SelectedBall;
 
+    protected override async Task OnInitializedAsync()
+    {
+        if (!Game.HasData)
+        {
+            Game.GetData();
+            StateHasChanged();
+        }
+    }
+
     private void Buy(int Amount)
     {
         Snackbar.Clear();

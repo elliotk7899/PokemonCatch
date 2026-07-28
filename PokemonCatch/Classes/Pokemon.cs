@@ -28,11 +28,16 @@
 
             NewPokemon.Weight = Math.Round(Reference.Weight + (rand.Next(-50, 51) / 10.0), 1);
 
+            if (NewPokemon.Weight < 0.2)
+            {
+                NewPokemon.Weight = 0.2;
+            }
+
             if (Reference.HasGender)
             {
                 if (Reference.HasSetGender)
                 {
-                    NewPokemon.Gender = Reference.SetGender;
+                    NewPokemon.Gender = Reference.SetGender ?? "";
                 } 
                 else
                 {
@@ -71,11 +76,11 @@
 
             if (NewPokemon.IsShiny)
             {
-                NewPokemon.Image = "Images/" + Reference.Name + "ShinyImage.png";
+                NewPokemon.Image = "Images/PokemonImages/" + Reference.Name + "ShinyImage.png";
             }
             else
             {
-                NewPokemon.Image = "Images/" + Reference.Name + "Image.png";
+                NewPokemon.Image = "Images/PokemonImages/" + Reference.Name + "Image.png";
             }
 
             NewPokemon.Value = (int)(Math.Round(Reference.Value * (NewPokemon.Weight / Reference.Weight)));

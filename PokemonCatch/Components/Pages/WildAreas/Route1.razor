@@ -11,13 +11,17 @@
 
 <MudGrid Justify="Justify.Center">
 
-    <MudItem><h2 style="text-decoration: underline;">Route 1</h2></MudItem>
+    <MudItem><h2 style="color: black; text-decoration: underline;">Route 1</h2></MudItem>
     <MudFlexBreak />
-    <MudItem><MudButton Variant="Variant.Filled" Color="Color.Info" Disabled="@Searching" OnClick="Encounter">Search</MudButton></MudItem>
+    <MudItem><MudButton Variant="Variant.Filled" Color="Color.Info" Disabled="@(Searching || Game.User.PlayerLevel.LevelNum < RouteLevel)" OnClick="Encounter">Search</MudButton></MudItem>
 
     <MudFlexBreak />
-    <MudItem></MudItem>
-    <MudFlexBreak />
+    <MudItem>@if (Game.User.PlayerLevel.LevelNum < RouteLevel) 
+        {
+            <MudAlert Severity="Severity.Error">Your level is too low to search this area.</MudAlert>
+        }
+    </MudItem>
+        <MudFlexBreak />
 
     @if(Searching)
     {
@@ -81,13 +85,23 @@
 @code {
     private bool Searching = false;
     private bool Catching = false;
+    private int RouteLevel = 1;
     private string PokemonImage { get; set; }
     private string PokemonName { get; set; }
     private Pokemon PokemonEncountered { get; set; }
-    private PokemonReference[] NativePokemon = { PokemonReference.AllPokemon[0] };
+    private PokemonReference[] NativePokemon = { PokemonReference.FindPokemon("Pidgey"), PokemonReference.FindPokemon("Rattata") };
     private PokemonReference Selected { get; set; }
 
     Random rand = new Random();
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (!Game.HasData)
+        {
+            Game.GetData();
+            StateHasChanged();
+        }
+    }
 
     private void Encounter()
     {
@@ -123,14 +137,20 @@
 
         if (LegendaryList.Count > 0)
         {
-
+            int EncounterNum = rand.Next(1, 1001);
+            if (EncounterNum == 1)
+            {
+                Selected = NativePokemon[rand.Next(0, NativePokemon.Length)];
+            } else
+            {
+                EncounterNum = rand.Next(0, EncounterList.Count);
+                Selected = NativePokemon[EncounterNum];
+            }
         } else
         {
-            
+            int EncounterNum = rand.Next(0, EncounterList.Count);
+            Selected = EncounterList[EncounterNum];
         }
-
-
-        Selected = NativePokemon[0];
 
         PokemonEncountered = Pokemon.CreatePokemon(Selected);
 
@@ -163,9 +183,9 @@
             await Task.Delay(2000);
 
             int CatchNum = rand.Next(1, 1001);
-            int ChanceNum = 1000 - ((int)Math.Floor((Selected.CatchRate * Ball.CatchChance) * 10));
+            int ChanceNum = 1000 - ((int)Math.Floor(((1 - (Selected.Value / 1000)) * Ball.CatchChance) * 1000));
 
-            if (CatchNum >= ChanceNum)
+            if (CatchNum >= ChanceNum || Ball.Name.Equals("Master Ball"))
             {
                 Shakes += 1;
 

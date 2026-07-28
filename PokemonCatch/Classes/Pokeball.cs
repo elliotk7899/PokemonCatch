@@ -31,7 +31,7 @@
             new Pokeball()
             {
                 Name = "Master Ball",
-                CatchChance = 8,
+                CatchChance = 10,
                 Image = "Images/Other/MasterBallImage.png",
                 Description = "The ultimate Poké Ball, known for having a guaranteed 100% success rate.",
                 Price = 10000

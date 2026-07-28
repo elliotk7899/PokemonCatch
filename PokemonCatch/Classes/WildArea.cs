@@ -8,8 +8,17 @@
                 Name = "Route 1",
                 RequiredLevel = 1,
                 Link = "/route1"
+            },
+            new WildArea {
+                Name = "Route 2",
+                RequiredLevel = 5,
+                Link = "/route2"
+            },
+            new WildArea {
+                Name = "Route 3",
+                RequiredLevel = 8,
+                Link = "/route3"
             }
-
         };
         public string Name { get; set; }
         public int RequiredLevel { get; set; }

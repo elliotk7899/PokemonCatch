@@ -40,5 +40,12 @@
 
 
 @code {
-
+    protected override async Task OnInitializedAsync()
+    {
+        if (!Game.HasData)
+        {
+            Game.GetData();
+            StateHasChanged();
+        }
+    }
 }

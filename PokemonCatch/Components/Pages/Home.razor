@@ -1,5 +1,6 @@
 ﻿@page "/"
 @using Classes
+@inject ISnackbar Snackbar
 
 <PageTitle>Home</PageTitle>
 
@@ -64,5 +65,31 @@
     </MudItem>
 </MudGrid>
 
+<br>
+
+<MudGrid Justify="Justify.FlexEnd">
+    <MudItem><MudButton Variant="Variant.Filled" Color="Color.Success" OnClick="SaveData">Save Data</MudButton></MudItem>
+</MudGrid>
+
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        if (!Game.HasData)
+        {
+            Game.GetData();
+            StateHasChanged();
+        }
+    }
+
+    private void SaveData()
+    {
+        Game.SaveData();
+
+        Snackbar.Clear();
+        Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomLeft;
+        Snackbar.Add("Data Saved!", Severity.Success);
+    }
+}
 
 

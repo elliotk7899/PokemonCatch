@@ -59,6 +59,15 @@
 @code {
     private string searchString1 = "";
 
+    protected override async Task OnInitializedAsync()
+    {
+        if (!Game.HasData)
+        {
+            Game.GetData();
+            StateHasChanged();
+        }
+    }
+
     private bool FilterFunc1(Pokemon element) => FilterFunc(element, searchString1);
 
     private bool FilterFunc(Pokemon element, string searchString)

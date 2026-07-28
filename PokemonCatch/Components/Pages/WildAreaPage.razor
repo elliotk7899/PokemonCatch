@@ -19,11 +19,20 @@
     <RowTemplate>
         <MudTd DataLabel="Area">@context.Name</MudTd>
         <MudTd DataLabel="Level Needed">@context.RequiredLevel</MudTd>
-        <MudTd><MudButton Href="@context.Link" Variant="Variant.Filled" Color="Color.Success" Style="display: flex; align-content: end;">Go</MudButton></MudTd>
+        <MudTd Class="text-end"><MudButton Href="@context.Link" Variant="Variant.Filled" Color="Color.Success" Disabled="Game.User.PlayerLevel.LevelNum < context.RequiredLevel">Go</MudButton></MudTd>
     </RowTemplate>
 </MudTable>
 
 
 @code {
+    protected override async Task OnInitializedAsync()
+    {
+        if (!Game.HasData)
+        {
+            Game.GetData();
+            StateHasChanged();
+        }
+    }
+
 
 }
