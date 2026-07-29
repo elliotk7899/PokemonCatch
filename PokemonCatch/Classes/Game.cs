@@ -6,7 +6,7 @@ namespace PokemonCatch.Classes
     {
         public static Player User = new Player()
         {
-            Name = "User",
+            Name = "Beginner",
             PlayerLevel = new Level(),
             Money = 500,
             PokemonCaught = new List<Pokemon>(),
@@ -25,7 +25,8 @@ namespace PokemonCatch.Classes
             File.WriteAllText(fileName, json);
         }
 
-        public static void GetData() {
+        public static void GetData()
+        {
             string filePath = AppContext.BaseDirectory;
             string fileName = filePath + "\\user_data.json";
             if (File.Exists(fileName))
@@ -33,7 +34,7 @@ namespace PokemonCatch.Classes
                 string json = File.ReadAllText(fileName);
                 User = JsonSerializer.Deserialize<Player>(json) ?? new Player()
                 {
-                    Name = "User",
+                    Name = "Beginner",
                     PlayerLevel = new Level(),
                     Money = 500,
                     PokemonCaught = new List<Pokemon>(),
@@ -42,6 +43,20 @@ namespace PokemonCatch.Classes
             }
 
             HasData = true;
+        }
+
+        public static void ResetData()
+        {
+            User = new Player()
+            {
+                Name = "Beginner",
+                PlayerLevel = new Level(),
+                Money = 500,
+                PokemonCaught = new List<Pokemon>(),
+                PokemonEntered = new List<PokemonReference>()
+            };
+
+            SaveData();
         }
     }
 }

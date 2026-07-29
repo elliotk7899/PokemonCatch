@@ -18,6 +18,11 @@
                 Name = "Route 3",
                 RequiredLevel = 8,
                 Link = "/route3"
+            },
+            new WildArea {
+                Name = "Ultimate Route",
+                RequiredLevel = 15,
+                Link = "/route4"
             }
         };
         public string Name { get; set; }

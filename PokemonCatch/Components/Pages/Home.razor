@@ -1,6 +1,7 @@
 ﻿@page "/"
 @using Classes
 @inject ISnackbar Snackbar
+@inject IDialogService DialogService
 
 <PageTitle>Home</PageTitle>
 
@@ -15,7 +16,7 @@
         <MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true" TabPanelsClass="pa-6" Style="background-color: white;">
             <MudTabPanel Text="Player Info">
                 <MudStack Row="true">
-                    <MudText Typo="Typo.h4">Tranier @Game.User.Name</MudText>
+                    <MudText Typo="Typo.h4">Trainer @Game.User.Name</MudText>
                     <MudSpacer />
                     <MudText Style="color: forestgreen;" Typo="Typo.h4">$@Game.User.Money</MudText>
                 </MudStack>
@@ -26,6 +27,13 @@
                     {
                         <MudText Typo="Typo.h5">@Ball.Name (@Ball.Number)</MudText>
                     }
+                </MudStack>
+            </MudTabPanel>
+            <MudTabPanel Text="Options">
+                <MudStack Row="true" Justify="Justify.Center">
+                    <MudButton Variant="Variant.Filled" Color="Color.Info" OnClick="OpenNameDialogAsync">Change Name</MudButton>
+                    <MudButton Variant="Variant.Filled" Color="Color.Success" OnClick="SaveData">Save Data</MudButton>
+                    <MudButton Variant="Variant.Filled" Color="Color.Error" OnClick="ResetData">Reset Data</MudButton>
                 </MudStack>
             </MudTabPanel>
         </MudTabs>
@@ -67,12 +75,10 @@
 
 <br>
 
-<MudGrid Justify="Justify.FlexEnd">
-    <MudItem><MudButton Variant="Variant.Filled" Color="Color.Success" OnClick="SaveData">Save Data</MudButton></MudItem>
-</MudGrid>
-
 
 @code {
+    private bool ConfirmVisible { get; set; } = false;
+
     protected override async Task OnInitializedAsync()
     {
         if (!Game.HasData)
@@ -89,6 +95,30 @@
         Snackbar.Clear();
         Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomLeft;
         Snackbar.Add("Data Saved!", Severity.Success);
+    }
+
+    private void ResetData()
+    {
+        Game.ResetData();
+        Snackbar.Clear();
+        Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomLeft;
+        Snackbar.Add("Data has been reset!", Severity.Error);
+        StateHasChanged();
+    }
+
+    private async Task OpenNameDialogAsync()
+    {
+        var DialogView = await DialogService.ShowAsync<NameDialog>("Name Dialog");
+        var DialogResult = await DialogView.Result;
+
+        if (!DialogResult.Canceled)
+        {
+            Snackbar.Clear();
+            Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomLeft;
+            Snackbar.Add("Your name has been changed to " + Game.User.Name, Severity.Info);
+
+            StateHasChanged();
+        }
     }
 }
 

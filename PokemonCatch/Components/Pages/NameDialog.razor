@@ -1,13 +1,16 @@
-﻿
+﻿@using Classes
+
 <MudDialog>
+    <TitleContent>
+    </TitleContent>
     <DialogContent>
         <MudForm @ref="NameForm" @bind-IsValid="@ValidName">
-            <MudTextField @bind-Value="Name" Label="Outlined" Variant="Variant.Outlined" Required="true"></MudTextField>
+            <MudTextField @bind-Value="Name" Label="Name" Variant="Variant.Outlined" Required="true"></MudTextField>
         </MudForm>
     </DialogContent>
     <DialogActions>
-        <MudButton>Cancel</MudButton>
-        <MudButton Variant="Variant.Filled" Color="Color.Info" OnClick="">Ok</MudButton>
+        <MudButton OnClick="Cancel">Cancel</MudButton>
+        <MudButton Variant="Variant.Filled" Color="Color.Info" OnClick="Ok" Disabled="@ValidName">Ok</MudButton>
     </DialogActions>
 </MudDialog>
 
@@ -15,4 +18,14 @@
     private MudForm NameForm;
     private string Name { get; set; }
     private bool ValidName { get; set; }
+
+    [CascadingParameter] private IMudDialogInstance MudDialog { get; set; }
+
+    private void Ok()
+    {
+        Game.User.Name = Name;
+        MudDialog.Close(DialogResult.Ok(true));
+    }
+
+    private void Cancel() => MudDialog.Cancel();
 }
