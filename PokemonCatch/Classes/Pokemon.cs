@@ -15,6 +15,7 @@
         public PokemonType? Type2 = null;
         public string TypeName { get; set; }
         
+        // Creates Pokemon with randomized attributes based on the given Pokemon Reference.
         public static Pokemon CreatePokemon(PokemonReference Reference)
         {
             Random rand = new Random();

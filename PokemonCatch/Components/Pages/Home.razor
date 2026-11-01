@@ -106,6 +106,7 @@
         StateHasChanged();
     }
 
+    // Opens the NameDialog to let the player change their name.
     private async Task OpenNameDialogAsync()
     {
         var DialogView = await DialogService.ShowAsync<NameDialog>("Name Dialog");

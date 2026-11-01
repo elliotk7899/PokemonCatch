@@ -29,6 +29,7 @@
         public int RequiredLevel { get; set; }
         public string Link { get; set; }
 
+        // Calculates how many areas are unlocked based on a given int that represents the level number.
         public static int NumAreasUnlocked(int Level)
         {
             int NumUnlocked = 0;

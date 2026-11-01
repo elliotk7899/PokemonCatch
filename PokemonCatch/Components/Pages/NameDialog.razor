@@ -21,6 +21,7 @@
 
     [CascadingParameter] private IMudDialogInstance MudDialog { get; set; }
 
+    // Changes the player's name to the value set inside the Name MudTextField.
     private void Ok()
     {
         Game.User.Name = Name;

@@ -112,6 +112,7 @@
         }
     }
 
+    // Selects a random pokemon to encounter from the NativePokemon array.
     private void Encounter()
     {
         Searching = true;
@@ -173,6 +174,7 @@
         Searching = false;
     }
 
+    // Calculates whether or the player caught the pokemon using the chosen pokeball.
     private async Task TryCatch(Pokeball Ball)
     {
         Catching = true;
@@ -246,6 +248,7 @@
         StateHasChanged();
     }
 
+    // Opens the CatchDialog to let the player select the pokeball they wish to use to try to catch the encountered pokemon.
     private async Task OpenCatchDialogAsync()
     {
         var options = new DialogOptions { CloseOnEscapeKey = true };

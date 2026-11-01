@@ -87,6 +87,7 @@
         return false;
     }
 
+    // Opens the ViewDialog to let the player view the selected pokemon.
     private async Task OpenViewDialogAsync(Pokemon Selected)
     {
         var parameters = new DialogParameters<ViewDialog> { { x => x.Chosen, Selected } };

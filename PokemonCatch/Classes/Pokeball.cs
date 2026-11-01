@@ -45,6 +45,7 @@
         public string Description { get; set; }
         public int Price { get; set; }
 
+        // Finds the target Pokeball and creates a copy of it with the Number attribute set to the Amount parameter.
         public static Pokeball AddBallItem(string BallName, int Amount)
         {
             foreach (var CurrentBall in AllPokeBalls)

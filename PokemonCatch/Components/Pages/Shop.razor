@@ -47,6 +47,7 @@
         }
     }
 
+    // Checks to see if the player can afford the purchase and gives the player the purchase if they can.
     private void Buy(int Amount)
     {
         Snackbar.Clear();
@@ -75,6 +76,7 @@
         }
     }
 
+    // Opens the ShopDialog to allow the player to select the number of the ChosenBall they wish to buy.
     private async Task OpenBuyDialogAsync(Pokeball ChosenBall)
     {
         SelectedBall = ChosenBall;

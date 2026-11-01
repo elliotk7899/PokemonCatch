@@ -14,7 +14,7 @@ namespace PokemonCatch.Classes
         };
         public static bool HasData { get; set; } = false;
 
-
+        // Saves the player's data using a JSON file.
         public static void SaveData()
         {
             string json = JsonSerializer.Serialize(User);
@@ -25,6 +25,7 @@ namespace PokemonCatch.Classes
             File.WriteAllText(fileName, json);
         }
 
+        // Grabs the player's data located in a JSON file and creates a default player objects if no data is found.
         public static void GetData()
         {
             string filePath = AppContext.BaseDirectory;
@@ -45,6 +46,7 @@ namespace PokemonCatch.Classes
             HasData = true;
         }
 
+        // Sets the player's data to a default player object.
         public static void ResetData()
         {
             User = new Player()

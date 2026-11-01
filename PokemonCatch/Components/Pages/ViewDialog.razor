@@ -55,6 +55,7 @@
 
     [Parameter] public Pokemon Chosen { get; set; }
 
+    // Sells the selected pokemon and adds the value of the pokemon to the player's money attribute.
     private void Sell()
     {
         Game.User.Money += Chosen.Value;

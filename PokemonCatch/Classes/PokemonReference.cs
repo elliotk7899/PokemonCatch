@@ -1675,6 +1675,7 @@ namespace PokemonCatch.Classes
 
         public PokemonType? Type2 = null;
 
+        // Finds the exact PokemonReference in the AllPokemon array from a given string that represents the name.
         public static PokemonReference? FindPokemon(string Name)
         {
             foreach (var Reference in AllPokemon)
@@ -1688,6 +1689,7 @@ namespace PokemonCatch.Classes
             return null;
         }
 
+        // Finds the exact PokemonReference in the AllPokemon array from a given int that represents the PokeDexNum.
         public static PokemonReference FindPokemonByDex(int Num)
         {
             Console.WriteLine(Num);
@@ -1702,6 +1704,7 @@ namespace PokemonCatch.Classes
             return null;
         }
 
+        // Checks to see if the target PokemonReference exists inside the given PokemonReference list.
         public static bool PokemonFoundInList(PokemonReference Target, List<PokemonReference> GivenList)
         {
             foreach (var Reference in GivenList)
